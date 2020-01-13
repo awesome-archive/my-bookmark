@@ -1,16 +1,29 @@
 app.factory('bookmarkService', ['$http', '$q', function($http, $q) {
     // service interface
     var service = {
-        getTitle: function(params) {
+        getArticle: function(params) {
             var def = $q.defer();
-            $http.post('/api/getTitle/', {
+            $http.post('/api/getArticle/', {
                     params: params
                 })
                 .success(function(data) {
                     def.resolve(data);
                 })
                 .error(function(data) {
-                    def.reject('getTitle error');
+                    def.reject(data);
+                });
+            return def.promise;
+        },
+        getUpdateLog: function(params) {
+            var def = $q.defer();
+            $http.post('/api/getUpdateLog/', {
+                    params: params
+                })
+                .success(function(data) {
+                    def.resolve(data);
+                })
+                .error(function(data) {
+                    def.reject(data);
                 });
             return def.promise;
         },
@@ -23,7 +36,7 @@ app.factory('bookmarkService', ['$http', '$q', function($http, $q) {
                     def.resolve(data);
                 })
                 .error(function(data) {
-                    def.reject('login error');
+                    def.reject(data);
                 });
             return def.promise;
         },
@@ -36,7 +49,7 @@ app.factory('bookmarkService', ['$http', '$q', function($http, $q) {
                     def.resolve(data);
                 })
                 .error(function(data) {
-                    def.reject('register error');
+                    def.reject(data);
                 });
             return def.promise;
         },
@@ -49,7 +62,7 @@ app.factory('bookmarkService', ['$http', '$q', function($http, $q) {
                     def.resolve(data);
                 })
                 .error(function(data) {
-                    def.reject('register error');
+                    def.reject(data);
                 });
             return def.promise;
         },
@@ -62,7 +75,20 @@ app.factory('bookmarkService', ['$http', '$q', function($http, $q) {
                     def.resolve(data);
                 })
                 .error(function(data) {
-                    def.reject('clickBookmark error');
+                    def.reject(data);
+                });
+            return def.promise;
+        },
+        jumpQuickUrl: function(params) {
+            var def = $q.defer();
+            $http.post('/api/jumpQuickUrl/', {
+                    params: params
+                })
+                .success(function(data) {
+                    def.resolve(data);
+                })
+                .error(function(data) {
+                    def.reject(data);
                 });
             return def.promise;
         },
@@ -75,7 +101,7 @@ app.factory('bookmarkService', ['$http', '$q', function($http, $q) {
                     def.resolve(data);
                 })
                 .error(function(data) {
-                    def.reject('logout error');
+                    def.reject(data);
                 });
             return def.promise;
         },
@@ -86,7 +112,20 @@ app.factory('bookmarkService', ['$http', '$q', function($http, $q) {
                     def.resolve(data);
                 })
                 .error(function(data) {
-                    def.reject('autoLogin error');
+                    def.reject(data);
+                });
+            return def.promise;
+        },
+        userInfo: function(params) {
+            var def = $q.defer();
+            $http.get('/api/userInfo/', {
+                    params: params
+                })
+                .success(function(data) {
+                    def.resolve(data);
+                })
+                .error(function(data) {
+                    def.reject(data);
                 });
             return def.promise;
         },
@@ -105,7 +144,7 @@ app.factory('bookmarkService', ['$http', '$q', function($http, $q) {
                     def.resolve(data);
                 })
                 .error(function(data, status) {
-                    def.reject('getBookmarks error');
+                    def.reject(data);
                 });
             return def.promise;
         },
@@ -119,7 +158,7 @@ app.factory('bookmarkService', ['$http', '$q', function($http, $q) {
                     def.resolve(data);
                 })
                 .error(function(data, status) {
-                    def.reject('bookmarksByTag error');
+                    def.reject(data);
                 });
             return def.promise;
         },
@@ -133,7 +172,21 @@ app.factory('bookmarkService', ['$http', '$q', function($http, $q) {
                     def.resolve(data);
                 })
                 .error(function(data, status) {
-                    def.reject('searchBookmarks error');
+                    def.reject(data);
+                });
+            return def.promise;
+        },
+        searchHotBookmarks: function(params) {
+            var def = $q.defer();
+
+            $http.get('/api/searchHotBookmarks/', {
+                    params: params
+                })
+                .success(function(data) {
+                    def.resolve(data);
+                })
+                .error(function(data, status) {
+                    def.reject(data);
                 });
             return def.promise;
         },
@@ -147,7 +200,7 @@ app.factory('bookmarkService', ['$http', '$q', function($http, $q) {
                     def.resolve(data);
                 })
                 .error(function(data, status) {
-                    def.reject('getBookmark error');
+                    def.reject(data);
                 });
             return def.promise;
         },
@@ -160,7 +213,20 @@ app.factory('bookmarkService', ['$http', '$q', function($http, $q) {
                     def.resolve(data);
                 })
                 .error(function(data) {
-                    def.reject('addBookmark error');
+                    def.reject(data);
+                });
+            return def.promise;
+        },
+        favoriteBookmark: function(params) {
+            var def = $q.defer();
+            $http.post('/api/favoriteBookmark/', {
+                    params: params
+                })
+                .success(function(data) {
+                    def.resolve(data);
+                })
+                .error(function(data) {
+                    def.reject(data);
                 });
             return def.promise;
         },
@@ -173,7 +239,7 @@ app.factory('bookmarkService', ['$http', '$q', function($http, $q) {
                     def.resolve(data);
                 })
                 .error(function(data) {
-                    def.reject('updateBookmark error');
+                    def.reject(data);
                 });
             return def.promise;
         },
@@ -186,7 +252,7 @@ app.factory('bookmarkService', ['$http', '$q', function($http, $q) {
                     def.resolve(data);
                 })
                 .error(function(data) {
-                    def.reject('delBookmark error');
+                    def.reject(data);
                 });
             return def.promise;
         },
@@ -204,7 +270,7 @@ app.factory('bookmarkService', ['$http', '$q', function($http, $q) {
                     def.resolve(data);
                 })
                 .error(function(data) {
-                    def.reject('getTags error');
+                    def.reject(data);
                 });
             return def.promise;
         },
@@ -217,36 +283,220 @@ app.factory('bookmarkService', ['$http', '$q', function($http, $q) {
                     def.resolve(data);
                 })
                 .error(function(data) {
-                    def.reject('addTags error');
+                    def.reject(data);
+                });
+            return def.promise;
+        },
+        updateTagName: function(params) {
+            var def = $q.defer();
+            $http.post('/api/updateTagName/', {
+                    params: params
+                })
+                .success(function(data) {
+                    def.resolve(data);
+                })
+                .error(function(data) {
+                    def.reject(data);
+                });
+            return def.promise;
+        },
+        updateTagShow: function(params) {
+            var def = $q.defer();
+            $http.post('/api/updateTagShow/', {
+                    params: params
+                })
+                .success(function(data) {
+                    def.resolve(data);
+                })
+                .error(function(data) {
+                    def.reject(data);
+                });
+            return def.promise;
+        },
+        updateTagsIndex: function(params) {
+            var def = $q.defer();
+            $http.post('/api/updateTagsIndex/', {
+                    params: params
+                })
+                .success(function(data) {
+                    def.resolve(data);
+                })
+                .error(function(data) {
+                    def.reject(data);
+                });
+            return def.promise;
+        },
+        delTag: function(params) {
+            var def = $q.defer();
+            $http.post('/api/delTag/', {
+                    params: params
+                })
+                .success(function(data) {
+                    def.resolve(data);
+                })
+                .error(function(data) {
+                    def.reject(data);
+                });
+            return def.promise;
+        },
+        updateShowStyle: function(params) {
+            var def = $q.defer();
+            $http.post('/api/updateShowStyle/', {
+                    params: params
+                })
+                .success(function(data) {
+                    def.resolve(data);
+                })
+                .error(function(data) {
+                    def.reject(data);
+                });
+            return def.promise;
+        },
+        updateSearchHistory: function(params) {
+            var def = $q.defer();
+            $http.post('/api/updateSearchHistory/', {
+                    params: params
+                })
+                .success(function(data) {
+                    def.resolve(data);
+                })
+                .error(function(data) {
+                    def.reject(data);
+                });
+            return def.promise;
+        },
+        updateQuickUrl: function(params) {
+            var def = $q.defer();
+            $http.post('/api/updateQuickUrl/', {
+                    params: params
+                })
+                .success(function(data) {
+                    def.resolve(data);
+                })
+                .error(function(data) {
+                    def.reject(data);
+                });
+            return def.promise;
+        },
+        getAdvices: function(params) {
+            var def = $q.defer();
+            $http.get('/api/advices/', {
+                    params: params
+                })
+                .success(function(data) {
+                    def.resolve(data);
+                })
+                .error(function(data) {
+                    def.reject(data);
+                });
+            return def.promise;
+        },
+        addAdvice: function(params) {
+            var def = $q.defer();
+            $http.post('/api/addAdvice/', {
+                    params: params
+                })
+                .success(function(data) {
+                    def.resolve(data);
+                })
+                .error(function(data) {
+                    def.reject(data);
+                });
+            return def.promise;
+        },
+        getHotBookmarks: function(params) {
+            var def = $q.defer();
+
+            $http.get('/api/hotBookmarks/', {
+                    params: params
+                })
+                .success(function(data) {
+                    def.resolve(data);
+                })
+                .error(function(data, status) {
+                    def.reject(data);
+                });
+            return def.promise;
+        },
+        addNote: function(params) {
+            var def = $q.defer();
+            $http.post('/api/addNote/', {
+                    params: params
+                })
+                .success(function(data) {
+                    def.resolve(data);
+                })
+                .error(function(data, status) {
+                    def.reject(data);
+                });
+            return def.promise;
+        },
+        getNotes: function(params) {
+            var def = $q.defer();
+            $http.get('/api/notes/', {
+                    params: params
+                })
+                .success(function(data) {
+                    def.resolve(data);
+                })
+                .error(function(data) {
+                    def.reject(data);
+                });
+            return def.promise;
+        },
+        delNote: function(params) {
+            var def = $q.defer();
+            $http.delete('/api/delNote/', {
+                    params: params
+                })
+                .success(function(data) {
+                    def.resolve(data);
+                })
+                .error(function(data) {
+                    def.reject(data);
+                });
+            return def.promise;
+        },
+        updateNote: function(params) {
+            var def = $q.defer();
+            $http.post('/api/updateNote/', {
+                    params: params
+                })
+                .success(function(data) {
+                    def.resolve(data);
+                })
+                .error(function(data) {
+                    def.reject(data);
+                });
+            return def.promise;
+        },
+        updateNotePublic: function(params) {
+          var def = $q.defer();
+          $http.post('/api/updateNotePublic/', {
+                  params: params
+              })
+              .success(function(data) {
+                  def.resolve(data);
+              })
+              .error(function(data) {
+                  def.reject(data);
+              });
+          return def.promise;
+      },
+        download: function(params) {
+            var def = $q.defer();
+            $http.get('/api/download/', {
+                    params: params
+                })
+                .success(function(data) {
+                    def.resolve(data);
+                })
+                .error(function(data) {
+                    def.reject(data);
                 });
             return def.promise;
         },
     };
 
     return service;
-}]);
-
-app.factory('httpInterceptor', ['$q', '$injector', function($q, $injector) {
-    var defered = $q.defer();
-    var httpInterceptor = {
-        request: function(config) {
-            return config;
-        },
-        requestError: function(err) {
-            return $q.reject(err);
-        },
-        response: function(res) {
-            return $q.resolve(res);
-        },
-        responseError: function(err) {
-            if (401 === err.status) {
-                // toastr.warning("您需要先登录才能使用该功能", "警告");
-                $injector.get('$state').go('login', {})
-            } else {
-                toastr.error(JSON.stringify(err), "错误");
-            }
-            return $q.reject(err);
-        }
-    }
-    return httpInterceptor;
 }]);

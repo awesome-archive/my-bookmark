@@ -12,6 +12,22 @@ function date(date, settings) {
     return year + '-' + month + '-' + day;
 };
 
+Date.prototype.format = function(fmt) { //author: meizz
+    var o = {
+        "M+": this.getMonth() + 1, //月份
+        "d+": this.getDate(), //日
+        "h+": this.getHours(), //小时
+        "m+": this.getMinutes(), //分
+        "s+": this.getSeconds(), //秒
+        "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+        "S": this.getMilliseconds() //毫秒
+    };
+    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    for (var k in o)
+        if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    return fmt;
+}
+
 app.directive('jsDataCreateInit', function($compile) {
     return {
         restrict: 'A',
@@ -39,7 +55,7 @@ app.directive('jsDataCreateInit', function($compile) {
                 startCalendar: $('.ui.calendar.js-date-create-begin')
             });
 
-            $('.js-create-date').dropdown('set value', 0);
+            $('.js-create-date').dropdown('set value', -1);
         },
     };
 });
@@ -68,7 +84,7 @@ app.directive('jsDataClickInit', function($compile) {
                 },
                 startCalendar: $('.ui.calendar.js-date-click-begin')
             });
-            $('.js-click-date').dropdown('set value', 0);
+            $('.js-click-date').dropdown('set value', -1);
         },
     };
 });
@@ -81,6 +97,9 @@ app.directive('jsDropdownUserRangeInit', function($compile, $timeout) {
                 onChange: function(value, text, $choice) {
                     $timeout(function() {
                         $scope.showTags = (value == '1');
+                        $scope.searchHotBookmarks = (value == '3');
+                        $scope.bookmarks = [];
+                        $scope.totalPages = 0
                     })
                 },
             });
@@ -158,7 +177,97 @@ app.directive('jsMenuInit', function($compile) {
                 $('.ui.menu a.item').on('click', function() {
                     $(this).addClass('selected').siblings().removeClass('selected');
                 });
+
+                $('.search-item').popup({
+                    on: 'focus',
+                    inline: true
+                });
             }
         },
     };
 });
+
+app.directive('jsSearchOptionInit', function($compile) {
+    return {
+        restrict: 'A',
+        link: function($scope, $element, $attrs) {
+            console.log('jsSearchOptionInit......')
+            $('.js-search-option').dropdown({
+                // on: 'hover',
+            });
+        },
+    };
+});
+
+app.directive('errSrc', function() {
+    return {
+        link: function(scope, element, attrs) {
+            element.bind('error', function() {
+                if (attrs.src != attrs.errSrc) {
+                    attrs.$set('src', attrs.errSrc);
+                }
+            });
+        }
+    }
+});
+
+app.directive('faviconErr', function() {
+    return {
+        link: function(scope, element, attrs) {
+            element.bind('error', function() {
+                if (attrs.src != attrs.faviconErr) {
+                    attrs.$set('src', attrs.faviconErr);
+                }
+            });
+        }
+    }
+});
+
+app.filter('characters', function() {
+        return function(input, chars, breakOnWord) {
+            if (isNaN(chars)) return input;
+            if (chars <= 0) return '';
+            if (input && input.length > chars) {
+                input = input.substring(0, chars);
+
+                if (!breakOnWord) {
+                    var lastspace = input.lastIndexOf(' ');
+                    //get last space
+                    if (lastspace !== -1) {
+                        input = input.substr(0, lastspace);
+                    }
+                } else {
+                    while (input.charAt(input.length - 1) === ' ') {
+                        input = input.substr(0, input.length - 1);
+                    }
+                }
+                return input + '…';
+            }
+            return input;
+        };
+    })
+    .filter('splitcharacters', function() {
+        return function(input, chars) {
+            if (isNaN(chars)) return input;
+            if (chars <= 0) return '';
+            if (input && input.length > chars) {
+                var prefix = input.substring(0, chars / 2);
+                var postfix = input.substring(input.length - chars / 2, input.length);
+                return prefix + '...' + postfix;
+            }
+            return input;
+        };
+    })
+    .filter('words', function() {
+        return function(input, words) {
+            if (isNaN(words)) return input;
+            if (words <= 0) return '';
+            if (input) {
+                var inputWords = input.split(/\s+/);
+                if (inputWords.length > words) {
+                    input = inputWords.slice(0, words).join(' ') + '…';
+                }
+            }
+            return input;
+        };
+    });

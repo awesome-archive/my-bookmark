@@ -1,13 +1,17 @@
-app.controller('loginCtr', ['$scope', '$filter', '$state', '$cookieStore', 'bookmarkService', 'pubSubService', function($scope, $filter, $state, $cookieStore, bookmarkService, pubSubService) {
-    console.log("Hello loginCtr...", $cookieStore.get("username"), $cookieStore.get("password"));
+app.controller('loginCtr', ['$scope', '$filter', '$state', '$cookieStore', '$window', 'bookmarkService', 'pubSubService', 'dataService', function($scope, $filter, $state, $cookieStore, $window, bookmarkService, pubSubService, dataService) {
+    console.log("Hello loginCtr...", $cookieStore.get("username"));
+    if(dataService.smallDevice()){
+        $window.location = "http://m.mybookmark.cn/#/tags";
+        return;
+    }
 
     pubSubService.publish('Common.menuActive', {
         login: false,
-        index: 1
+        index: dataService.NotLoginIndexLogin
     });
 
     $scope.username = $cookieStore.get("username") || "";
-    $scope.password = $cookieStore.get("password") || "";
+    $scope.password = "";
     $scope.showErr = false;
     $scope.errInfo = '';
 
@@ -15,14 +19,6 @@ app.controller('loginCtr', ['$scope', '$filter', '$state', '$cookieStore', 'book
     $scope.usernameRegister = "";
     $scope.passwordRegister1 = "";
     $scope.passwordRegister2 = "";
-
-
-    $scope.myKeyup = function(e) {
-        var keycode = window.event ? e.keyCode : e.which;
-        if (keycode == 13) {
-            $scope.login();
-        }
-    };
 
     $scope.login = function() {
         var autoLogin = $('.ui.checkbox.js-auto-login').checkbox('is checked');
@@ -39,7 +35,6 @@ app.controller('loginCtr', ['$scope', '$filter', '$state', '$cookieStore', 'book
                 autoLogin: autoLogin,
             };
             $cookieStore.put("username", $scope.username);
-            $cookieStore.put("password", $scope.password);
             bookmarkService.login(params)
                 .then((data) => {
                     console.log(data);
@@ -47,9 +42,7 @@ app.controller('loginCtr', ['$scope', '$filter', '$state', '$cookieStore', 'book
                         pubSubService.publish('loginCtr.login', {
                             'login': data.logined,
                         });
-                        $state.go('bookmarks', {
-                            showStyle: 'navigate',
-                        })
+                        $state.go('bookmarks', {})
                     } else {
                         console.log('login failed......................')
                         toastr.error('账号或者密码错误', "错误");
@@ -62,7 +55,7 @@ app.controller('loginCtr', ['$scope', '$filter', '$state', '$cookieStore', 'book
     $scope.showRegister = function() {
         $('.ui.modal.js-register').modal({
             closable: false,
-        }).modal('show');
+        }).modal('setting', 'transition', dataService.animation()).modal('show');
 
         $scope.emailRegister = "";
         $scope.usernameRegister = "";
@@ -82,7 +75,7 @@ app.controller('loginCtr', ['$scope', '$filter', '$state', '$cookieStore', 'book
             $scope.passwordRegister2 = "";
             return;
         }
-        if (!/([0-9a-zA-Z]){3,12}/.test($scope.usernameRegister)) {
+        if (!/^[A-Za-z0-9]{3,12}$/.test($scope.usernameRegister)) {
             toastr.error('账号只能是数字字母，且长度必须为3到12位', "错误");
             return;
         }
@@ -113,4 +106,12 @@ app.controller('loginCtr', ['$scope', '$filter', '$state', '$cookieStore', 'book
                 toastr.error('注册失败：' + JSON.stringify(err), "错误");
             });
     }
+
+    var className = 'js-form-login';
+    $('.' + className).transition('hide');
+    $('.' + className).transition({
+        animation: dataService.animation(),
+        duration: 500,
+    });
+
 }]);

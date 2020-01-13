@@ -35,3 +35,11 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
+
+# Upload File
+uploads
+/public/images/snap/
+/public/images/favicon/
+.tags
+package-lock.json
+config.js
